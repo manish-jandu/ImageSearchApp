@@ -21,5 +21,5 @@ interface UnsplashAPI {
         page:Int,
         @Query("per_page")
         perPage:Int
-    ):Response<UnsplashResponse>
+    ):UnsplashResponse
 }
