@@ -13,8 +13,12 @@ import com.manishjandu.imagesearchapp.data.UnsplashPhoto
 import com.manishjandu.imagesearchapp.databinding.ItemUnsplashPhotoBinding
 import java.util.*
 
-class UnsplashPhotoAdapter :
+class UnsplashPhotoAdapter(private val listener: OnItemClickListener) :
     PagingDataAdapter<UnsplashPhoto, UnsplashPhotoAdapter.PhotoViewHolder>(PHOTO_COMPARATOR) {
+
+    interface OnItemClickListener {
+        fun onItemClicked(photo: UnsplashPhoto)
+    }
 
     companion object {
         private val PHOTO_COMPARATOR = object : DiffUtil.ItemCallback<UnsplashPhoto>() {
@@ -44,6 +48,17 @@ class UnsplashPhotoAdapter :
 
     inner class PhotoViewHolder(private val binding: ItemUnsplashPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = getItem(position)
+                    if (item != null) listener.onItemClicked(item)
+                }
+            }
+        }
+
         fun bind(photo: UnsplashPhoto?) {
             binding.apply {
                 Glide.with(itemView)
